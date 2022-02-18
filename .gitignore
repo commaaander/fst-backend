@@ -1,0 +1,10 @@
+# Visual Studio Code
+.vscode
+
+# Python
+__pycache__
+requirements.txt
+poetry.lock
+
+# Docker
+.env
