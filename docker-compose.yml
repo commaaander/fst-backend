@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+    restart: unless-stopped
+    volumes:
+      - ./backend/app:/code/app
+    ports:
+      - 8080:8080
+    environment:
+      - HETZNER_DNS_API_KEY=${HETZNER_DNS_API_KEY}
