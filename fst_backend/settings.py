@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "corsheaders",
     # local
     "fst_backend.accounts.apps.AccountsConfig",
+    "fst_backend.api.apps.ApiConfig",
 ]
 
 MIDDLEWARE = [
