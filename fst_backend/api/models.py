@@ -74,7 +74,7 @@ class EventMedia(models.Model):
         null=True,
         validators=[MinValueValidator(1000), MaxValueValidator(10000)],
     )
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(to=Tag, blank=True)
 
     def __str__(self) -> str:
         return self.mediaUrl
@@ -124,7 +124,7 @@ class Member(models.Model):
     email = models.EmailField(blank=True, null=True, max_length=100)
     phone = models.CharField(blank=True, null=True, max_length=100)
     dietType = models.CharField(blank=True, null=True, choices=DietType.choices, max_length=100)
-    allergies = models.ManyToManyField(Allergy)
+    allergies = models.ManyToManyField(to=Allergy, blank=True)
     # birthday = models.OneToOneField(CustomeDate)
     # deathday = models.OneToOneField(CustomeDate)
     placeOfBirth = models.CharField(blank=True, null=True, max_length=100)
