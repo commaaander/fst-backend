@@ -131,4 +131,8 @@ class Member(models.Model):
     placeOfDeath = models.CharField(blank=True, null=True, max_length=100)
 
     def __str__(self) -> str:
-        return f"{self.lastname}, {self.middlenames if self.middlenames else ''} {self.firstname}"
+        return (
+            f"{self.lastname}, "
+            f"{self.middlenames if self.middlenames else ''} "
+            f"{self.firstname if self.firstname else ''}"
+        )
