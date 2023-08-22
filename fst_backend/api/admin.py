@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import Member, Tag, Event, EventMedia
 
-# Register your models here.
+admin.site.register(Tag)
+admin.site.register(Event)
+admin.site.register(EventMedia)
+admin.site.register(Member)
