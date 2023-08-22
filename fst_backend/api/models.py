@@ -80,21 +80,39 @@ class EventMedia(models.Model):
         return self.mediaUrl
 
 
+class Allergy(models.Model):
+    class AllergyType(models.TextChoices):
+        nuts = "nuts", _("Nüsse")
+        lactose = "lactose", _("Laktose")
+        sesame = "sesame", _("Sesam")
+        fish = "fish", _("Fisch")
+        eggs = "eggs", _("Eier")
+        gluten = "gluten", _("Gluten")
+        mustard = "mustard", _("Senf")
+        celery = "celery", _("Sellerie")
+        soy = "soy", _("Soja")
+        custom = "custom", _("Sonstige")
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    type = models.CharField(choices=AllergyType.choices, default=AllergyType.custom, max_length=100)
+
+    def __str__(self) -> str:
+        return self.type
+
+
 class Member(models.Model):
     class Title(models.TextChoices):
         prof = "prof", _("Prof.")
         dr = "dr", _("Dr.")
         profDr = "profDr", _("Prof. Dr.")
-        none = "none", ""
 
     class DietType(models.TextChoices):
         vegetarian = "vegetarian", _("Vegetarisch")
         vegan = "vegan", _("Vegan")
         custom = "custom", _("Sonstige")
-        none = "none", ""
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(choices=Title.choices, default=Title.none, max_length=10)
+    title = models.CharField(blank=True, null=True, choices=Title.choices, max_length=10)
     firstname = models.CharField(blank=True, null=True, max_length=100)
     lastname = models.CharField(max_length=100)
     middlenames = models.CharField(blank=True, null=True, max_length=100)
@@ -105,7 +123,8 @@ class Member(models.Model):
     country = models.CharField(blank=True, null=True, max_length=100)
     email = models.EmailField(blank=True, null=True, max_length=100)
     phone = models.CharField(blank=True, null=True, max_length=100)
-    dietType = models.CharField(choices=DietType.choices, default=DietType.none, max_length=10)
+    dietType = models.CharField(blank=True, null=True, choices=DietType.choices, max_length=100)
+    allergies = models.ManyToManyField(Allergy)
     # birthday = models.OneToOneField(CustomeDate)
     # deathday = models.OneToOneField(CustomeDate)
     placeOfBirth = models.CharField(blank=True, null=True, max_length=100)
@@ -113,21 +132,3 @@ class Member(models.Model):
 
     def __str__(self) -> str:
         return f"{self.lastname}, {self.middlenames if self.middlenames else ''} {self.firstname}"
-
-
-# class Allergies(models.Model):
-#     class Allergy(models.TextChoices):
-#         nuts = ("nuts", _("Nüsse"))
-#         lactose = ("lactose", _("Laktose"))
-#         sesame = ("sesame", _("Sesam"))
-#         fish = ("fish", _("Fisch"))
-#         eggs = ("eggs", _("Eier"))
-#         gluten = ("gluten", _("Gluten"))
-#         mustard = ("mustard", _("Senf"))
-#         celery = ("celery", _("Sellerie"))
-#         soy = ("soy", _("Soja"))
-#         custom = ("custom", _("Sonstige"))
-
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     type = models.CharField(choices=Allergy, default="custom")
-#     member = models.ForeignKey(to=Member, on_delete=models.CASCADE, related_name="allergies")
