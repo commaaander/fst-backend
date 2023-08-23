@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # 3rd party
     "rest_framework",
     "corsheaders",
+    "drf_spectacular",
     # local
     "fst_backend.accounts.apps.AccountsConfig",
     "fst_backend.api.apps.ApiConfig",
@@ -132,6 +133,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 CORS_ALLOWED_ORIGINS = (
@@ -142,3 +144,11 @@ CORS_ALLOWED_ORIGINS = (
 CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
 
 AUTH_USER_MODEL = "accounts.CustomUser"
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "FST Backend",
+    "DESCRIPTION": "Backend for familiensskatturnier.de",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    # OTHER SETTINGS
+}
