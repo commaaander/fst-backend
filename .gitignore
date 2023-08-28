@@ -1,4 +1,10 @@
+# python stuff
 .venv
 __pycache__
 
+# database stuff
 *.sqlite3
+db_data.json
+
+# django stuff
+schema.yml
