@@ -1,7 +1,9 @@
+ARG DJANGO_WORKDIR=/var/lib/cia/
+
 FROM python:3.10-slim-bookworm
 
 # set work directory
-WORKDIR /var/lib/cia/
+WORKDIR ${DJANGO_WORKDIR}
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -16,8 +18,9 @@ RUN pip install -r requirements.txt
 COPY ./LICENSE .
 COPY ./fst_backend ./fst_backend
 COPY ./manage.py .
-COPY ./db.sqlite3 .
+RUN ./manage.py migrate --noinput
 
-EXPOSE 9000
+EXPOSE 8000
 
-CMD ["gunicorn","fst_backend.wsgi:application","--bind","0.0.0.0:9000"]
+#CMD ["gunicorn","fst_backend.wsgi:application","--bind","0.0.0.0:9000"]
+CMD ["python","manage.py","runserver","0.0.0.0:8000"]
