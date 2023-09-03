@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "fst-backend"
+version = "0.1.0"
+description = "Backend for familienskatturnier.de"
+authors = ["Robert Frießleben <robert.friessleben@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Django = "^4.2.4"
+djangorestframework = "^3.14.0"
+django-cors-headers = "^4.2.0"
+drf-spectacular = "^0.26.4"
+gunicorn = "^21.2.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
