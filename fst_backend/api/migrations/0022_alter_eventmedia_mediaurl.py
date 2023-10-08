@@ -5,7 +5,6 @@ import fst_backend.api.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("api", "0021_alter_member_allergies"),
     ]
@@ -14,8 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="eventmedia",
             name="mediaUrl",
-            field=models.ImageField(
-                blank=True, null=True, upload_to=fst_backend.api.models.upload_to
-            ),
+            field=models.ImageField(blank=True, null=True, upload_to=fst_backend.api.models.eventmedia.upload_to),
         ),
     ]
