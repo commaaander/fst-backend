@@ -1,6 +1,12 @@
 # FST Backend
 
 ## Requirements
+
+### For Development
+- [Poetry](https://python-poetry.org/)
+- [Visual Studio Code](https://code.visualstudio.com/)
+
+### For Deployment
 - Run locally
     - Python
     - Python Modules venv and pip
