@@ -20,7 +20,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 from fst_backend.api import views
-from drf_spectacular.views import SpectacularAPIView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 router = routers.DefaultRouter()
 router.register(r"users", views.UserViewSet)
@@ -37,6 +37,7 @@ urlpatterns = [
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path("admin/", admin.site.urls),
     path("api/schema/v1/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/docs/v1/", SpectacularSwaggerView.as_view(), name="api-docs"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
