@@ -162,6 +162,14 @@ docs = ["furo", "olefile", "sphinx (>=2.4)", "sphinx-copybutton", "sphinx-inline
 tests = ["check-manifest", "coverage", "defusedxml", "markdown2", "olefile", "packaging", "pyroma", "pytest", "pytest-cov", "pytest-timeout"]
 
 [[package]]
+name = "psycopg2-binary"
+version = "2.9.9"
+description = "psycopg2 - Python-PostgreSQL Database Adapter"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
 name = "pytz"
 version = "2023.3.post1"
 description = "World timezone definitions, modern and historical"
@@ -237,7 +245,7 @@ python-versions = ">=3.6"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "a0097336da64bf949a0bc6fc41bb78b1bb87eced2ea804ce388a6409db034528"
+content-hash = "4a555642011e13c51b97d54fb78152c6b836ec005de7251e3bfbc7eda2ff6d7e"
 
 [metadata.files]
 asgiref = []
@@ -252,6 +260,7 @@ jsonschema = []
 jsonschema-specifications = []
 packaging = []
 pillow = []
+psycopg2-binary = []
 pytz = []
 pyyaml = []
 referencing = []
