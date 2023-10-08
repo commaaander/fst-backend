@@ -29,7 +29,7 @@ tests-no-zope = ["cloudpickle", "hypothesis", "mypy (>=1.1.1)", "pympler", "pyte
 
 [[package]]
 name = "django"
-version = "4.2.5"
+version = "4.2.6"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
 category = "main"
 optional = false
@@ -143,7 +143,7 @@ referencing = ">=0.28.0"
 
 [[package]]
 name = "packaging"
-version = "23.1"
+version = "23.2"
 description = "Core utilities for Python packages"
 category = "main"
 optional = false
@@ -191,7 +191,7 @@ rpds-py = ">=0.7.0"
 
 [[package]]
 name = "rpds-py"
-version = "0.10.3"
+version = "0.10.4"
 description = "Python bindings to Rust's persistent data structures (rpds)"
 category = "main"
 optional = false
