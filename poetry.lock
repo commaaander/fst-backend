@@ -29,7 +29,7 @@ tests-no-zope = ["cloudpickle", "hypothesis", "mypy (>=1.1.1)", "pympler", "pyte
 
 [[package]]
 name = "django"
-version = "4.2.4"
+version = "4.2.5"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
 category = "main"
 optional = false
@@ -69,7 +69,7 @@ pytz = "*"
 
 [[package]]
 name = "drf-spectacular"
-version = "0.26.4"
+version = "0.26.5"
 description = "Sane and flexible OpenAPI 3 schema generation for Django REST framework"
 category = "main"
 optional = false
@@ -114,7 +114,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "jsonschema"
-version = "4.19.0"
+version = "4.19.1"
 description = "An implementation of JSON Schema validation for Python"
 category = "main"
 optional = false
@@ -150,8 +150,20 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "pillow"
+version = "10.0.1"
+description = "Python Imaging Library (Fork)"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.extras]
+docs = ["furo", "olefile", "sphinx (>=2.4)", "sphinx-copybutton", "sphinx-inline-tabs", "sphinx-removed-in", "sphinxext-opengraph"]
+tests = ["check-manifest", "coverage", "defusedxml", "markdown2", "olefile", "packaging", "pyroma", "pytest", "pytest-cov", "pytest-timeout"]
+
+[[package]]
 name = "pytz"
-version = "2023.3"
+version = "2023.3.post1"
 description = "World timezone definitions, modern and historical"
 category = "main"
 optional = false
@@ -179,7 +191,7 @@ rpds-py = ">=0.7.0"
 
 [[package]]
 name = "rpds-py"
-version = "0.10.0"
+version = "0.10.3"
 description = "Python bindings to Rust's persistent data structures (rpds)"
 category = "main"
 optional = false
@@ -200,11 +212,11 @@ test = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "typing-extensions"
-version = "4.7.1"
-description = "Backported and Experimental Type Hints for Python 3.7+"
+version = "4.8.0"
+description = "Backported and Experimental Type Hints for Python 3.8+"
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 
 [[package]]
 name = "tzdata"
@@ -225,7 +237,7 @@ python-versions = ">=3.6"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "9c880fae5382c11054715e2442ce16f33d5fddd165009c62929c9d3e5cb20d4e"
+content-hash = "a0097336da64bf949a0bc6fc41bb78b1bb87eced2ea804ce388a6409db034528"
 
 [metadata.files]
 asgiref = []
@@ -239,6 +251,7 @@ inflection = []
 jsonschema = []
 jsonschema-specifications = []
 packaging = []
+pillow = []
 pytz = []
 pyyaml = []
 referencing = []

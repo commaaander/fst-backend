@@ -54,9 +54,13 @@ class Event(models.Model):
         return self.title
 
 
+def upload_to(instance, filename):
+    return "images/{filename}".format(filename=filename)
+
+
 class EventMedia(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    mediaUrl = models.CharField(max_length=1024)
+    mediaUrl = models.ImageField(upload_to=upload_to, blank=True, null=True)
     mimeType = models.CharField(max_length=64)
     event = models.ForeignKey(blank=True, null=True, to=Event, on_delete=models.CASCADE)
     from_day = models.PositiveIntegerField(

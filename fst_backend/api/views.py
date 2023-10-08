@@ -12,6 +12,7 @@ from .serializers import (
     MemberSerializer,
     AllergySerializer,
 )
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -46,12 +47,13 @@ class EventViewSet(viewsets.ModelViewSet):
 
 class EventMediaViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows Events to be viewed or edited.
+    API endpoint that allows EventMedia to be viewed or edited.
     """
 
     queryset = EventMedia.objects.all()
     serializer_class = EventMediaSerializer
     permission_classes = [permissions.IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser)
 
 
 class TagViewSet(viewsets.ModelViewSet):
@@ -76,7 +78,7 @@ class MemberViewSet(viewsets.ModelViewSet):
 
 class AllergyViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows Members to be viewed or edited.
+    API endpoint that allows Allergies to be viewed or edited.
     """
 
     queryset = Allergy.objects.all()
