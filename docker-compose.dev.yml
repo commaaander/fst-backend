@@ -13,6 +13,22 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
 
+  pgadmin:
+    image: dpage/pgadmin4
+    expose:
+      - 80
+    depends_on:
+      - db
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+      - "$PWD/db/servers.json:/pgadmin4/servers.json"
+      - "$PWD/db/pgpass:/pgpass"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fst-pgadmin.rule=Host(`fst-pgadmin.localhost`)"
+
   backend:
     hostname: django
     build:
@@ -45,7 +61,7 @@ services:
     depends_on:
       - backend
     volumes:
-      - $PWD/traefik.dev.yml:/etc/traefik/traefik.yml
+      - $PWD/traefik/traefik.dev.yml:/etc/traefik/traefik.yml
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 volumes:
