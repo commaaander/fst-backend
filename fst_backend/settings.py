@@ -21,10 +21,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-z&r7inh1yh*jbreacln)yj16!z$afu&8l)f(!9d8^*2z5o1^z)"
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "changeme")
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get("DJANGO_DEBUG", 1))
 
 ALLOWED_HOSTS = []
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "drf_spectacular",
     # local
+    "fst_backend.core.apps.CoreConfig",
     "fst_backend.accounts.apps.AccountsConfig",
     "fst_backend.api.apps.ApiConfig",
 ]
@@ -84,8 +86,11 @@ WSGI_APPLICATION = "fst_backend.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db/db.sqlite3",  # TODO: set db path in a proper way
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": os.environ.get("DB_HOST"),
+        "NAME": os.environ.get("DB_NAME"),
+        "USER": os.environ.get("DB_USER"),
+        "PASSWORD": os.environ.get("DB_PASSWORD"),
     }
 }
 

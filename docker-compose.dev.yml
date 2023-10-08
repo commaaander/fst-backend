@@ -3,40 +3,39 @@ version: "3.9"
 services:
   db:
     image: postgres:15-alpine
-    host_name: postgres
+    hostname: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     expose:
       - 5432
     environment:
+      - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
 
   backend:
-    host_name: django
+    hostname: django
     build:
       dockerfile: Dockerfile
       context: .
       args:
         - DJANGO_WORKDIR=${DJANGO_WORKDIR}
         - DEBUG=${DJANGO_DEBUG}
-    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python manage.py runserver 0.0.0.0:8000'
     volumes:
-      - ./db:/db
-    ports:
-      - ${DJANGO_PORT}:8000
+      - $PWD/fst_backend:${DJANGO_WORKDIR}/fst_backend
+    expose:
+      - 8000
     environment:
       - DEBUG=${DJANGO_DEBUG}
       - DB_HOST=db
+      - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
     depends_on:
       - db
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.django.rule=Host(`django.localhost`)"
+      - "traefik.http.routers.fst-backend.rule=Host(`fst-backend.localhost`)"
 
   traefik:
     image: traefik:2.10
@@ -46,8 +45,8 @@ services:
     depends_on:
       - backend
     volumes:
-      - "$PWD/traefik.dev.toml:/etc/traefik/traefik.toml"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - $PWD/traefik.dev.yml:/etc/traefik/traefik.yml
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 volumes:
   postgres_data:

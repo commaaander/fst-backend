@@ -1,8 +1,8 @@
-ARG DJANGO_WORKDIR=/var/lib/cia/
-
-FROM python:3.10-slim-bookworm
+FROM python:3.11-slim-bookworm
+LABEL maintainer="Commaaanders Intelligence Agency"
 
 # set work directory
+ARG DJANGO_WORKDIR=/var/lib/cia/
 WORKDIR ${DJANGO_WORKDIR}
 
 # set environment variables
@@ -18,9 +18,9 @@ RUN pip install -r requirements.txt
 COPY ./LICENSE .
 COPY ./fst_backend ./fst_backend
 COPY ./manage.py .
-RUN ./manage.py migrate --noinput
+COPY ./run.sh /usr/local/bin
+RUN  chmod u+x /usr/local/bin/run.sh
 
 EXPOSE 8000
 
-#CMD ["gunicorn","fst_backend.wsgi:application","--bind","0.0.0.0:9000"]
-CMD ["python","manage.py","runserver","0.0.0.0:8000"]
+CMD ["run.sh"]
