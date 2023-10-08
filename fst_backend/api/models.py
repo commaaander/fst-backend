@@ -4,6 +4,31 @@ import uuid
 from django.utils.translation import gettext_lazy as _
 
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
+from datetime import datetime
+
+
+class CustomDate(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    day = models.PositiveIntegerField(blank=True, null=True)
+    month = models.PositiveIntegerField(blank=True, null=True)
+    year = models.PositiveIntegerField(blank=True, null=True)
+
+    def clean(self):
+        # Check if day, month, and year are present and form a valid date.
+        if self.day and self.month:
+            try:
+                # If the year isn't set, use a leap year to allow for February 29th.
+                datetime(year=self.year or 2000, month=self.month, day=self.day)
+            except ValueError:
+                raise ValidationError(
+                    _("Invalid date: {year:04d}-{month:02d}-{day:02d}").format(
+                        year=self.year or 0, month=self.month or 0, day=self.day or 0
+                    )
+                )
+
+    def __str__(self):
+        return "{year:04d}-{month:02d}-{day:02d}".format(year=self.year or 0, month=self.month or 0, day=self.day or 0)
 
 
 class Tag(models.Model):
@@ -18,36 +43,10 @@ class Event(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=64)
     description = models.TextField(blank=True, null=True, max_length=64)
-    from_day = models.PositiveIntegerField(
-        blank=True,
-        null=True,
-        validators=[MinValueValidator(1), MaxValueValidator(31)],
+    from_date = models.ForeignKey(
+        CustomDate, blank=True, null=True, on_delete=models.CASCADE, related_name="from_events"
     )
-    from_month = models.PositiveIntegerField(
-        blank=True,
-        null=True,
-        validators=[MinValueValidator(1), MaxValueValidator(13)],
-    )
-    from_year = models.PositiveIntegerField(
-        blank=True,
-        null=True,
-        validators=[MinValueValidator(1000), MaxValueValidator(10000)],
-    )
-    to_day = models.PositiveIntegerField(
-        blank=True,
-        null=True,
-        validators=[MinValueValidator(1), MaxValueValidator(31)],
-    )
-    to_month = models.PositiveIntegerField(
-        blank=True,
-        null=True,
-        validators=[MinValueValidator(1), MaxValueValidator(13)],
-    )
-    to_year = (
-        models.PositiveIntegerField(
-            blank=True, null=True, validators=[MinValueValidator(1000), MaxValueValidator(10000)]
-        ),
-    )
+    to_date = models.ForeignKey(CustomDate, blank=True, null=True, on_delete=models.CASCADE, related_name="to_events")
     tags = models.ManyToManyField(Tag)
 
     def __str__(self) -> str:
