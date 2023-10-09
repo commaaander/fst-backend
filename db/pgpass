@@ -1,1 +1,1 @@
-db:5432:fst:django:changeme
+db:*:*:django:changeme
