@@ -15,5 +15,5 @@
         "--max-line-length=119",
     ],
     "editor.formatOnSave": true,
-    "ruff.args": ["--ignore E501"]
+    "ruff.lint.args": ["--ignore E501"]
 }
