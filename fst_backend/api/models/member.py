@@ -4,6 +4,7 @@ import uuid
 from django.utils.translation import gettext_lazy as _
 
 from .allergy import Allergy
+from .customdate import CustomDate
 
 
 class Member(models.Model):
@@ -32,7 +33,12 @@ class Member(models.Model):
     dietType = models.CharField(blank=True, null=True, choices=DietType.choices, max_length=100)
     allergies = models.ManyToManyField(to=Allergy, blank=True)
     # birthday = models.OneToOneField(CustomeDate)
-    # deathday = models.OneToOneField(CustomeDate)
+    birthday = models.ForeignKey(
+        CustomDate, blank=True, null=True, on_delete=models.CASCADE, related_name="birthday_members"
+    )
+    deathday = models.ForeignKey(
+        CustomDate, blank=True, null=True, on_delete=models.CASCADE, related_name="deathday_members"
+    )
     placeOfBirth = models.CharField(blank=True, null=True, max_length=100)
     placeOfDeath = models.CharField(blank=True, null=True, max_length=100)
 
