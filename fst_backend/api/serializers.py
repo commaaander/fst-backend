@@ -5,7 +5,7 @@ from fst_backend.accounts.models import CustomUser
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 
-from .models import Allergy, EventMedia, Member, Tag, Event, CustomDate
+from .models import Allergy, EventMedia, Member, Tag, Event, CustomDate, Node, SiblingRelationship
 import re
 
 
@@ -145,4 +145,30 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
 class AllergySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Allergy
+        fields = "__all__"
+
+
+class SiblingRelationshipSerializer(serializers.ModelSerializer):
+    to_node = serializers.PrimaryKeyRelatedField(queryset=Node.objects.all())
+    from_node = serializers.PrimaryKeyRelatedField(queryset=Node.objects.all())
+
+    class Meta:
+        model = SiblingRelationship
+        fields = "__all__"
+
+
+class SiblingSerializer(serializers.ModelSerializer):
+    node_id = serializers.PrimaryKeyRelatedField(source="to_node", read_only=True)
+
+    class Meta:
+        model = SiblingRelationship
+        fields = ("node_id", "relationship_type")
+
+
+class NodeSerializer(serializers.ModelSerializer):
+    children = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    siblings = SiblingSerializer(source="from_node_set", many=True, read_only=True)
+
+    class Meta:
+        model = Node
         fields = "__all__"

@@ -31,6 +31,8 @@ router.register(r"tags", views.TagViewSet)
 router.register(r"eventMedia", views.EventMediaViewSet)
 router.register(r"member", views.MemberViewSet)
 router.register(r"allergies", views.AllergyViewSet)
+router.register(r"nodes", views.NodeViewSet)
+router.register(r"siblingrelationships", views.SiblingRelationshipViewSet)
 
 
 urlpatterns = [

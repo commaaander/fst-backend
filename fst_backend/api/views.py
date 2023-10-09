@@ -1,6 +1,6 @@
 from django.contrib.auth.models import Group
 from fst_backend.accounts.models import CustomUser
-from .models import Event, EventMedia, Tag, Member, Allergy, CustomDate
+from .models import Event, EventMedia, Tag, Member, Allergy, CustomDate, Node, SiblingRelationship
 from rest_framework import viewsets
 from rest_framework import permissions
 from .serializers import (
@@ -12,6 +12,8 @@ from .serializers import (
     MemberSerializer,
     AllergySerializer,
     CustomDateSerializer,
+    NodeSerializer,
+    SiblingRelationshipSerializer,
 )
 from rest_framework.parsers import MultiPartParser, FormParser
 
@@ -63,3 +65,13 @@ class AllergyViewSet(viewsets.ModelViewSet):
     queryset = Allergy.objects.all()
     serializer_class = AllergySerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class SiblingRelationshipViewSet(viewsets.ModelViewSet):
+    queryset = SiblingRelationship.objects.all()
+    serializer_class = SiblingRelationshipSerializer
+
+
+class NodeViewSet(viewsets.ModelViewSet):
+    queryset = Node.objects.all()
+    serializer_class = NodeSerializer
