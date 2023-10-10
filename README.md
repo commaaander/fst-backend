@@ -20,10 +20,17 @@ git clone git@github.com:commaaander/fst-backend.git
 cd fst-backend
 ```
 
+## Configurration
+```shell
+# Get source code
+cp .env.template .env
+vi .env
+```
+
 ## Usage
 ### Run for development
 ```shell
-docker compose -f ./docker-compose.dev.yml build
+docker compose build
 docker compose up -d
 ```
 
