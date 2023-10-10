@@ -34,6 +34,7 @@ router.register(r"allergies", views.AllergyViewSet)
 router.register(r"nodes", views.NodeViewSet)
 router.register(r"siblingrelationships", views.SiblingRelationshipViewSet)
 router.register(r"spouserelationships", views.SpouseRelationshipViewSet)
+router.register(r"parentchildrelationships", views.ParentChildRelationshipSerializerViewSet)
 
 
 urlpatterns = [

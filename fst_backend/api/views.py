@@ -1,6 +1,17 @@
 from django.contrib.auth.models import Group
 from fst_backend.accounts.models import CustomUser
-from .models import Event, EventMedia, Tag, Member, Allergy, CustomDate, Node, SiblingRelationship, SpouseRelationship
+from .models import (
+    Event,
+    EventMedia,
+    Tag,
+    Member,
+    Allergy,
+    CustomDate,
+    Node,
+    SiblingRelationship,
+    SpouseRelationship,
+    ParentChildRelationship,
+)
 from rest_framework import viewsets, permissions
 from .serializers import (
     CustomUserSerializer,
@@ -14,6 +25,7 @@ from .serializers import (
     NodeSerializer,
     SiblingRelationshipSerializer,
     SpouseRelationshipSerializer,
+    ParentChildRelationshipSerializer,
 )
 from rest_framework.parsers import MultiPartParser, FormParser
 
@@ -76,6 +88,12 @@ class SiblingRelationshipViewSet(viewsets.ModelViewSet):
 class SpouseRelationshipViewSet(viewsets.ModelViewSet):
     queryset = SpouseRelationship.objects.all()
     serializer_class = SpouseRelationshipSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class ParentChildRelationshipSerializerViewSet(viewsets.ModelViewSet):
+    queryset = ParentChildRelationship.objects.all()
+    serializer_class = ParentChildRelationshipSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 

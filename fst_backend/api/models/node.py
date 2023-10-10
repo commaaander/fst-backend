@@ -38,6 +38,20 @@ class SpouseRelationship(models.Model):
         unique_together = [("from_node", "to_node")]
 
 
+class ParentChildRelationship(models.Model):
+    RELATIONSHIP_TYPES = (
+        ("blood", _("blood")),
+        ("adopted", _("adopted")),
+        ("step", _("step")),
+    )
+    parent = models.ForeignKey("Node", related_name="child_relations", on_delete=models.CASCADE)
+    child = models.ForeignKey("Node", related_name="parent_relations", on_delete=models.CASCADE)
+    relationship_type = models.CharField(max_length=50, choices=RELATIONSHIP_TYPES)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["parent", "child"], name="unique_parent_child_relation")]
+
+
 class Node(GenderMixin, GenerationMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     lastname = models.CharField(blank=True, null=True, max_length=100)
@@ -53,7 +67,9 @@ class Node(GenderMixin, GenerationMixin):
     placeOfBirth = models.CharField(blank=True, null=True, max_length=100)
     placeOfDeath = models.CharField(blank=True, null=True, max_length=100)
     placeholder = models.BooleanField(blank=True, null=True)
-    parents = models.ManyToManyField("self", symmetrical=False, related_name="children", blank=True)
+    parents = models.ManyToManyField(
+        "self", through="ParentChildRelationship", symmetrical=False, related_name="children", blank=True
+    )
     siblings = models.ManyToManyField(
         "self", through="SiblingRelationship", symmetrical=False, related_name="sibling_set", blank=True
     )
