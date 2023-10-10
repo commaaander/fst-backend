@@ -1,11 +1,8 @@
 from django.contrib.auth.models import Group
 from fst_backend.accounts.models import CustomUser
-
-# from fst_backend.api.models import Member
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
-
-from .models import Allergy, EventMedia, Member, Tag, Event, CustomDate, Node, SiblingRelationship
+from .models import Allergy, EventMedia, Member, Tag, Event, CustomDate, Node, SiblingRelationship, SpouseRelationship
 import re
 
 
@@ -165,9 +162,27 @@ class SiblingSerializer(serializers.ModelSerializer):
         fields = ("node_id", "relationship_type")
 
 
+class SpouseRelationshipSerializer(serializers.ModelSerializer):
+    to_node = serializers.PrimaryKeyRelatedField(queryset=Node.objects.all())
+    from_node = serializers.PrimaryKeyRelatedField(queryset=Node.objects.all())
+
+    class Meta:
+        model = SpouseRelationship
+        fields = "__all__"
+
+
+class SpouseSerializer(serializers.ModelSerializer):
+    node_id = serializers.PrimaryKeyRelatedField(source="to_node", read_only=True)
+
+    class Meta:
+        model = SpouseRelationship
+        fields = ("node_id", "relationship_type")
+
+
 class NodeSerializer(serializers.ModelSerializer):
     children = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    siblings = SiblingSerializer(source="from_node_set", many=True, read_only=True)
+    siblings = SiblingSerializer(source="from_sibling_node_set", many=True, read_only=True)
+    spouses = SpouseSerializer(source="from_spouse_node_set", many=True, read_only=True)
 
     class Meta:
         model = Node

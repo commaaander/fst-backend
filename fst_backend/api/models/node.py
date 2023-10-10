@@ -16,9 +16,23 @@ class SiblingRelationship(models.Model):
         ("step", _("step")),
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    from_node = models.ForeignKey("Node", on_delete=models.CASCADE, related_name="from_node_set")
-    to_node = models.ForeignKey("Node", on_delete=models.CASCADE, related_name="to_node_set")
+    from_node = models.ForeignKey("Node", on_delete=models.CASCADE, related_name="from_sibling_node_set")
+    to_node = models.ForeignKey("Node", on_delete=models.CASCADE, related_name="to_sibling_node_set")
     relationship_type = models.CharField(max_length=10, choices=RELATIONSHIP_TYPES)
+
+    class Meta:
+        unique_together = [("from_node", "to_node")]
+
+
+class SpouseRelationship(models.Model):
+    RELATIONSHIP_TYPES = (
+        ("partnership", _("partnership")),
+        ("married", _("married")),
+    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    from_node = models.ForeignKey("Node", on_delete=models.CASCADE, related_name="from_spouse_node_set")
+    to_node = models.ForeignKey("Node", on_delete=models.CASCADE, related_name="to_spouse_node_set")
+    relationship_type = models.CharField(max_length=16, choices=RELATIONSHIP_TYPES)
 
     class Meta:
         unique_together = [("from_node", "to_node")]
@@ -43,7 +57,9 @@ class Node(GenderMixin, GenerationMixin):
     siblings = models.ManyToManyField(
         "self", through="SiblingRelationship", symmetrical=False, related_name="sibling_set", blank=True
     )
-    spouses = models.ManyToManyField("self", symmetrical=True, blank=True)
+    spouses = models.ManyToManyField(
+        "self", through="SpouseRelationship", symmetrical=False, related_name="spouse_set", blank=True
+    )
 
     def __str__(self) -> str:
         return f"{self.firstname} {self.lastname}".strip()
@@ -63,11 +79,35 @@ def create_symmetrical_sibling(sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=SiblingRelationship)
-def delete_reverse_relationship(sender, instance, **kwargs):
+def delete_reverse_sibling_relationship(sender, instance, **kwargs):
     try:
         reverse_relationship = SiblingRelationship.objects.get(
             from_node=instance.to_node, to_node=instance.from_node, relationship_type=instance.relationship_type
         )
         reverse_relationship.delete()
     except SiblingRelationship.DoesNotExist:
+        pass
+
+
+@receiver(post_save, sender=SpouseRelationship)
+def create_symmetrical_pouse(sender, instance, **kwargs):
+    reverse_sibling, created = SpouseRelationship.objects.get_or_create(
+        from_node=instance.to_node,
+        to_node=instance.from_node,
+        defaults={"relationship_type": instance.relationship_type},
+    )
+    # If the reverse relationship exists but has a different relationship_type, update it
+    if not created and reverse_sibling.relationship_type != instance.relationship_type:
+        reverse_sibling.relationship_type = instance.relationship_type
+        reverse_sibling.save()
+
+
+@receiver(post_delete, sender=SpouseRelationship)
+def delete_reverse_spouse_relationship(sender, instance, **kwargs):
+    try:
+        reverse_relationship = SpouseRelationship.objects.get(
+            from_node=instance.to_node, to_node=instance.from_node, relationship_type=instance.relationship_type
+        )
+        reverse_relationship.delete()
+    except SpouseRelationship.DoesNotExist:
         pass
