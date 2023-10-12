@@ -7,9 +7,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write("Init allergy database.")
+        type_already_exists_count = 0
         for allergy_type in Allergy.AllergyType:
             if not Allergy.objects.filter(type=allergy_type.value).exists():
                 Allergy.objects.create(type=allergy_type.value)
-                self.stdout.write(self.style.SUCCESS(f"Added allergy {allergy_type.value}."))
+                self.stdout.write(self.style.SUCCESS(f"Added allergy type {allergy_type.value}."))
             else:
-                self.stdout.write(self.style.WARNING(f"Allergy {allergy_type.value} allready exists."))
+                type_already_exists_count += 1
+
+        if type_already_exists_count > 0:
+            self.stdout.write(self.style.WARNING(f"{type_already_exists_count} allergy types already existed."))
