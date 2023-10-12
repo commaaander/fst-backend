@@ -68,13 +68,13 @@ class TagViewSet(viewsets.ModelViewSet):
 
 
 class MemberViewSet(viewsets.ModelViewSet):
-    queryset = Member.objects.all()
+    queryset = Member.objects.all().order_by("lastname", "firstname")
     serializer_class = MemberSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
 class AllergyViewSet(viewsets.ModelViewSet):
-    queryset = Allergy.objects.all()
+    queryset = Allergy.objects.all().order_by("type")
     serializer_class = AllergySerializer
     permission_classes = [permissions.IsAuthenticated]
 
