@@ -111,7 +111,7 @@ class EventMediaSerializer(serializers.ModelSerializer):
         ]
 
 
-class MemberSerializer(serializers.HyperlinkedModelSerializer):
+class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
         fields = "__all__"
