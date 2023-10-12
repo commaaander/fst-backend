@@ -20,7 +20,7 @@ git clone git@github.com:commaaander/fst-backend.git
 cd fst-backend
 ```
 
-## Configurration
+## Configuration
 ```shell
 # Get source code
 cp .env.template .env
