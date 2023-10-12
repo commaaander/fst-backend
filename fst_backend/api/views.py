@@ -97,7 +97,7 @@ class ParentChildRelationshipSerializerViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class NodeViewSet(viewsets.ModelViewSet):
+class NodeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Node.objects.all()
     serializer_class = NodeSerializer
     permission_classes = [permissions.IsAuthenticated]
