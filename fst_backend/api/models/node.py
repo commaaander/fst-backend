@@ -3,9 +3,9 @@ import uuid
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
-from .customdate import CustomDate
 from .gendermixin import GenderMixin
 from .generationmixin import GenerationMixin
+from .member import Member
 from django.utils.translation import gettext_lazy as _
 
 
@@ -52,21 +52,7 @@ class ParentChildRelationship(models.Model):
         constraints = [models.UniqueConstraint(fields=["parent", "child"], name="unique_parent_child_relation")]
 
 
-class Node(GenderMixin, GenerationMixin):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    lastname = models.CharField(blank=True, null=True, max_length=100)
-    firstname = models.CharField(blank=True, null=True, max_length=100)
-    middlenames = models.CharField(blank=True, null=True, max_length=100)
-    phone = models.CharField(blank=True, null=True, max_length=100)
-    birthday = models.ForeignKey(
-        CustomDate, blank=True, null=True, on_delete=models.CASCADE, related_name="birthday_nodes"
-    )
-    deathday = models.ForeignKey(
-        CustomDate, blank=True, null=True, on_delete=models.CASCADE, related_name="deathday_nodes"
-    )
-    placeOfBirth = models.CharField(blank=True, null=True, max_length=100)
-    placeOfDeath = models.CharField(blank=True, null=True, max_length=100)
-    placeholder = models.BooleanField(blank=True, null=True)
+class Node(Member, GenderMixin, GenerationMixin):
     parents = models.ManyToManyField(
         "self", through="ParentChildRelationship", symmetrical=False, related_name="children", blank=True
     )
