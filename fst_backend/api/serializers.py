@@ -120,6 +120,7 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
     deathday = serializers.CharField(required=False, allow_blank=True, default="")
 
     def create(self, validated_data):
+        allergies_data = validated_data.pop("allergies", [])
         birthday_str = validated_data.pop("birthday", None)
         deathday_str = validated_data.pop("deathday", None)
 
@@ -131,8 +132,42 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
             to_date = self._convert_str_to_custom_date(deathday_str)
             validated_data["deathday"] = to_date
 
-        event = Member.objects.create(**validated_data)
-        return event
+        member = Member.objects.create(**validated_data)
+        node = Node(member_ptr=member)
+        node.save_base(raw=True)
+
+        for allergy_data in allergies_data:
+            member.allergies.add(allergy_data)
+
+        return member
+
+    def update(self, instance, validated_data):
+        allergies_data = validated_data.pop("allergies", [])
+        birthday_str = validated_data.pop("birthday", None)
+        deathday_str = validated_data.pop("deathday", None)
+
+        if birthday_str:
+            from_date = self._convert_str_to_custom_date(birthday_str)
+            instance.birthday = from_date
+        elif instance.birthday:
+            instance.birthday = None
+
+        if deathday_str:
+            to_date = self._convert_str_to_custom_date(deathday_str)
+            instance.deathday = to_date
+        elif instance.deathday:
+            instance.deathday = None
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+
+        instance.allergies.clear()
+        for allergy_data in allergies_data:
+            instance.allergies.add(allergy_data)
+
+        return instance
 
     def _convert_str_to_custom_date(self, date_str):
         year, month, day = map(int, date_str.split("-"))
@@ -150,7 +185,7 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
         return value
 
 
-class AllergySerializer(serializers.HyperlinkedModelSerializer):
+class AllergySerializer(serializers.ModelSerializer):
     class Meta:
         model = Allergy
         fields = "__all__"
@@ -166,11 +201,11 @@ class SiblingRelationshipSerializer(serializers.ModelSerializer):
 
 
 class SiblingSerializer(serializers.ModelSerializer):
-    node_id = serializers.PrimaryKeyRelatedField(source="to_node", read_only=True)
+    member_id = serializers.PrimaryKeyRelatedField(source="to_node", read_only=True)
 
     class Meta:
         model = SiblingRelationship
-        fields = ("node_id", "relationship_type")
+        fields = ("member_id", "relationship_type")
 
 
 class SpouseRelationshipSerializer(serializers.ModelSerializer):
@@ -183,11 +218,11 @@ class SpouseRelationshipSerializer(serializers.ModelSerializer):
 
 
 class SpouseSerializer(serializers.ModelSerializer):
-    node_id = serializers.PrimaryKeyRelatedField(source="to_node", read_only=True)
+    member_id = serializers.PrimaryKeyRelatedField(source="to_node", read_only=True)
 
     class Meta:
         model = SpouseRelationship
-        fields = ("node_id", "relationship_type")
+        fields = ("member_id", "relationship_type")
 
 
 class ParentChildRelationshipSerializer(serializers.ModelSerializer):
@@ -200,19 +235,19 @@ class ParentChildRelationshipSerializer(serializers.ModelSerializer):
 
 
 class ParentRelationshipSerializer(serializers.ModelSerializer):
-    node_id = serializers.PrimaryKeyRelatedField(source="parent", queryset=Node.objects.all())
+    member_id = serializers.PrimaryKeyRelatedField(source="parent", queryset=Node.objects.all())
 
     class Meta:
         model = ParentChildRelationship
-        fields = ("node_id", "relationship_type")
+        fields = ("member_id", "relationship_type")
 
 
 class ChildRelationshipSerializer(serializers.ModelSerializer):
-    node_id = serializers.PrimaryKeyRelatedField(source="child", queryset=Node.objects.all())
+    member_id = serializers.PrimaryKeyRelatedField(source="child", queryset=Node.objects.all())
 
     class Meta:
         model = ParentChildRelationship
-        fields = ("node_id", "relationship_type")
+        fields = ("member_id", "relationship_type")
 
 
 class NodeSerializer(serializers.ModelSerializer):
