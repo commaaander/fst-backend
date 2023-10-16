@@ -1,3 +1,4 @@
+from .member import Member
 from django.db import models
 import uuid
 
@@ -13,6 +14,7 @@ class Event(models.Model):
         CustomDate, blank=True, null=True, on_delete=models.CASCADE, related_name="from_events"
     )
     to_date = models.ForeignKey(CustomDate, blank=True, null=True, on_delete=models.CASCADE, related_name="to_events")
+    organizer = models.ForeignKey(blank=True, null=True, to=Member, on_delete=models.PROTECT, related_name="events")
     tags = models.ManyToManyField(Tag)
 
     def __str__(self) -> str:
