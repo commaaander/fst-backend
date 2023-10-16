@@ -13,9 +13,8 @@ from .models import (
     ParentChildRelationship,
 )
 from rest_framework import viewsets, permissions
+from fst_backend.accounts.serializers import CustomUserSerializer, GroupSerializer
 from .serializers import (
-    CustomUserSerializer,
-    GroupSerializer,
     EventSerializer,
     TagSerializer,
     EventMediaSerializer,
@@ -55,7 +54,7 @@ class CustomDateViewSet(viewsets.ModelViewSet):
 
 
 class EventMediaViewSet(viewsets.ModelViewSet):
-    queryset = EventMedia.objects.all()
+    queryset = EventMedia.objects.all().order_by("id")
     serializer_class = EventMediaSerializer
     permission_classes = [permissions.IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
