@@ -24,18 +24,18 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from fst_backend.core import views as core_views
 
 router = routers.DefaultRouter()
-router.register(r"users", views.UserViewSet)
-router.register(r"groups", views.GroupViewSet)
-router.register(r"events", views.EventViewSet)
-router.register(r"tags", views.TagViewSet)
+router.register(r"user", views.UserViewSet)
+router.register(r"group", views.GroupViewSet)
+router.register(r"event", views.EventViewSet)
+router.register(r"tag", views.TagViewSet)
 router.register(r"eventMedia", views.EventMediaViewSet)
 router.register(r"member", views.MemberViewSet)
 router.register(r"allergies", views.AllergyViewSet)
 
-router.register(r"nodes", views.NodeViewSet)
-router.register(r"siblingrelationships", views.SiblingRelationshipViewSet)
-router.register(r"spouserelationships", views.SpouseRelationshipViewSet)
-router.register(r"parentchildrelationships", views.ParentChildRelationshipSerializerViewSet)
+router.register(r"node", views.NodeViewSet)
+router.register(r"siblingrelationship", views.SiblingRelationshipViewSet)
+router.register(r"spouserelationship", views.SpouseRelationshipViewSet)
+router.register(r"parentchildrelationship", views.ParentChildRelationshipSerializerViewSet)
 
 
 urlpatterns = [
