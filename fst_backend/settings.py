@@ -130,6 +130,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = STATIC_URL
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -162,7 +163,7 @@ SPECTACULAR_SETTINGS = {
 }
 
 # Media
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
+MEDIA_ROOT = os.path.join(os.path.dirname(os.environ.get("DJANGO_WORKDIR", BASE_DIR)), "media")
 
 # URL used to access the media
 MEDIA_URL = "/media/"
