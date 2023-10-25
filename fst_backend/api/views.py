@@ -42,7 +42,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 class EventViewSet(viewsets.ModelViewSet):
-    queryset = Event.objects.all()
+    queryset = Event.objects.all().order_by("id")
     serializer_class = EventSerializer
     permission_classes = [permissions.IsAuthenticated]
 
