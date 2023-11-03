@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from fst_backend.api.models import Allergy
 
 

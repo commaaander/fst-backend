@@ -1,7 +1,8 @@
-from rest_framework import serializers
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from fst_backend.api.models import Member, CustomDate, Node
-import re
+from rest_framework import serializers
+
+from fst_backend.api.models import CustomDate, Member, Node
 
 
 class MemberSerializer(serializers.ModelSerializer):

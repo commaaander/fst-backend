@@ -1,9 +1,10 @@
 from rest_framework import serializers
+
 from fst_backend.api.models import (
     Node,
+    ParentChildRelationship,
     SiblingRelationship,
     SpouseRelationship,
-    ParentChildRelationship,
 )
 
 

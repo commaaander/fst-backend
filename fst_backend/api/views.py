@@ -1,32 +1,34 @@
 from django.contrib.auth.models import Group
+from rest_framework import permissions, viewsets
+from rest_framework.parsers import FormParser, MultiPartParser
+
 from fst_backend.accounts.models import CustomUser
+from fst_backend.accounts.serializers import CustomUserSerializer, GroupSerializer
+
 from .models import (
-    Event,
-    EventMedia,
-    Tag,
-    Member,
     Allergy,
     CustomDate,
+    Event,
+    EventMedia,
+    Member,
     Node,
+    ParentChildRelationship,
     SiblingRelationship,
     SpouseRelationship,
-    ParentChildRelationship,
+    Tag,
 )
-from rest_framework import viewsets, permissions
-from fst_backend.accounts.serializers import CustomUserSerializer, GroupSerializer
 from .serializers import (
-    EventSerializer,
-    TagSerializer,
-    EventMediaSerializer,
-    MemberSerializer,
     AllergySerializer,
     CustomDateSerializer,
+    EventMediaSerializer,
+    EventSerializer,
+    MemberSerializer,
     NodeSerializer,
+    ParentChildRelationshipSerializer,
     SiblingRelationshipSerializer,
     SpouseRelationshipSerializer,
-    ParentChildRelationshipSerializer,
+    TagSerializer,
 )
-from rest_framework.parsers import MultiPartParser, FormParser
 
 
 class UserViewSet(viewsets.ModelViewSet):

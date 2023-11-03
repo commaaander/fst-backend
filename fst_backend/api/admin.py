@@ -1,15 +1,16 @@
 from django.contrib import admin
+
 from .models import (
     Allergy,
-    Member,
-    Tag,
+    CustomDate,
     Event,
     EventMedia,
-    CustomDate,
+    Member,
     Node,
+    ParentChildRelationship,
     SiblingRelationship,
     SpouseRelationship,
-    ParentChildRelationship,
+    Tag,
 )
 
 admin.site.register(Tag)

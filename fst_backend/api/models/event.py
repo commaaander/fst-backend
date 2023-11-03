@@ -1,9 +1,8 @@
-from .member import Member
-from .base import BaseModel
-
 from django.db import models
 
+from .base import BaseModel
 from .customdate import CustomDate
+from .member import Member
 from .tag import Tag
 
 

@@ -1,7 +1,9 @@
-from rest_framework import serializers
-from django.utils.translation import gettext_lazy as _
-from fst_backend.api.models import Event, CustomDate
 import re
+
+from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers
+
+from fst_backend.api.models import CustomDate, Event
 
 
 class EventSerializer(serializers.ModelSerializer):
