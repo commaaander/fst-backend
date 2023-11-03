@@ -6,8 +6,20 @@ from fst_backend.api.models import CustomDate, Member, Node
 
 
 class MemberSerializer(serializers.ModelSerializer):
-    birthday = serializers.CharField(required=False, allow_blank=True, default="", help_text=_("Format: YYYY-MM-DD"))
-    deathday = serializers.CharField(required=False, allow_blank=True, default="", help_text=_("Format: YYYY-MM-DD"))
+    birthday = serializers.RegexField(
+        regex=r"^\d{4}-\d{2}-\d{2}$",
+        required=False,
+        allow_blank=True,
+        default="",
+        help_text=_("Format: YYYY-MM-DD"),
+    )
+    deathday = serializers.RegexField(
+        regex=r"^\d{4}-\d{2}-\d{2}$",
+        required=False,
+        allow_blank=True,
+        default="",
+        help_text=_("Format: YYYY-MM-DD"),
+    )
 
     class Meta:
         model = Member
@@ -20,18 +32,18 @@ class MemberSerializer(serializers.ModelSerializer):
             "gender",
             "title",
             "birthday",
-            "deathday",
-            "dietType",
+            "placeOfBirth",
             "birthname",
+            "deathday",
+            "placeOfDeath",
             "address",
             "zip",
             "city",
             "country",
             "email",
             "phone",
-            "placeOfBirth",
-            "placeOfDeath",
             "allergies",
+            "dietType",
         ]
 
     def create(self, validated_data):
@@ -48,11 +60,25 @@ class MemberSerializer(serializers.ModelSerializer):
         return member
 
     def update(self, instance, validated_data):
-        allergies_data = validated_data.pop("allergies", [])
-        instance.allergies.set(allergies_data)
+        instance.allergies.set(validated_data.pop("allergies", []))
 
-        instance.birthday = self.convert_str_to_custom_date(validated_data.get("birthday"))
-        instance.deathday = self.convert_str_to_custom_date(validated_data.get("deathday"))
+        for attribute in ["birthday", "deathday"]:
+            date_str = validated_data.pop(attribute)
+            if date_str:
+                year, month, day = map(int, date_str.split("-"))
+                date = getattr(instance, attribute)
+                if date:
+                    setattr(date, "year", year)
+                    setattr(date, "month", month)
+                    setattr(date, "day", day)
+                    try:
+                        date.full_clean()
+                        date.save()
+                    except ValidationError as ve:
+                        raise serializers.ValidationError({attribute: ve.messages})
+
+                else:
+                    setattr(instance, attribute, CustomDate.objects.create(year=year, month=month, day=day))
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -66,14 +92,3 @@ class MemberSerializer(serializers.ModelSerializer):
             year, month, day = map(int, date_str.split("-"))
             return CustomDate.objects.create(year=year, month=month, day=day)
         return None
-
-    def validate_birthday(self, value):
-        return self.validate_date_format(value)
-
-    def validate_deathday(self, value):
-        return self.validate_date_format(value)
-
-    def validate_date_format(self, value):
-        if value and not re.match(r"^\d{4}-\d{2}-\d{2}$", value):
-            raise serializers.ValidationError(_("The date must be in the format YYYY-MM-DD or empty."))
-        return value
