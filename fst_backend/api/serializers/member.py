@@ -5,8 +5,8 @@ import re
 
 
 class MemberSerializer(serializers.ModelSerializer):
-    birthday = serializers.CharField(required=False, allow_blank=True, default="")
-    deathday = serializers.CharField(required=False, allow_blank=True, default="")
+    birthday = serializers.CharField(required=False, allow_blank=True, default="", help_text=_("Format: YYYY-MM-DD"))
+    deathday = serializers.CharField(required=False, allow_blank=True, default="", help_text=_("Format: YYYY-MM-DD"))
 
     class Meta:
         model = Member
@@ -48,6 +48,8 @@ class MemberSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         allergies_data = validated_data.pop("allergies", [])
+        instance.allergies.set(allergies_data)
+
         instance.birthday = self.convert_str_to_custom_date(validated_data.get("birthday"))
         instance.deathday = self.convert_str_to_custom_date(validated_data.get("deathday"))
 
@@ -55,8 +57,6 @@ class MemberSerializer(serializers.ModelSerializer):
             setattr(instance, attr, value)
 
         instance.save()
-
-        instance.allergies.set(allergies_data)
 
         return instance
 
