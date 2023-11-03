@@ -1,21 +1,17 @@
-from django.db import models
-import uuid
-
-from django.utils.translation import gettext_lazy as _
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.core.exceptions import ValidationError
 from datetime import date
 
+from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 
-class CustomDate(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    day = models.PositiveIntegerField(blank=True, null=True, validators=[MinValueValidator(1), MaxValueValidator(31)])
-    month = models.PositiveIntegerField(
-        blank=True, null=True, validators=[MinValueValidator(1), MaxValueValidator(12)]
-    )
-    year = models.PositiveIntegerField(
-        blank=True, null=True, validators=[MinValueValidator(1), MaxValueValidator(9999)]
-    )
+from .base import BaseModel
+
+
+class CustomDate(BaseModel):
+    day = models.PositiveIntegerField(blank=True, null=True, validators=[MaxValueValidator(31)])
+    month = models.PositiveIntegerField(blank=True, null=True, validators=[MaxValueValidator(12)])
+    year = models.PositiveIntegerField(blank=True, null=True)
 
     def clean(self):
         if self.day and self.month:
