@@ -14,6 +14,8 @@ drf-spectacular = "^0.26.4"
 gunicorn = "^21.2.0"
 Pillow = "^10.0.1"
 psycopg2-binary = "^2.9.9"
+django-extensions = "^3.2.3"
+ipython = "^8.17.2"
 
 [tool.poetry.dev-dependencies]
 ipykernel = "^6.25.2"

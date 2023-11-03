@@ -15,5 +15,12 @@
         "--max-line-length=119",
     ],
     "editor.formatOnSave": true,
-    "ruff.lint.args": ["--ignore E501"]
+    "ruff.lint.args": [
+        "--ignore",
+        "E501"
+    ],
+    "mypy-type-checker.args": [
+        "--config-file ",
+        "./mypy.ini"
+    ]
 }
