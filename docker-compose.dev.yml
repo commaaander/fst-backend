@@ -1,6 +1,12 @@
 version: "3.9"
+volumes:
+  postgres_data:
+
 
 services:
+  #
+  # ------------------------------------------------------------------
+  #
   db:
     image: postgres:15-alpine
     hostname: postgres
@@ -12,7 +18,9 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-
+  #
+  # ------------------------------------------------------------------
+  #
   pgadmin:
     image: dpage/pgadmin4
     expose:
@@ -28,7 +36,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.fst-pgadmin.rule=Host(`fst-pgadmin.localhost`)"
-
+  #
+  # ------------------------------------------------------------------
+  #
   backend:
     hostname: django
     build:
@@ -52,23 +62,23 @@ services:
       - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
       - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
       - DJANGO_WORKDIR=${DJANGO_WORKDIR}
-
     depends_on:
       - db
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.fst-backend.rule=Host(`fst-backend.localhost`)"
-
+  #
+  # ------------------------------------------------------------------
+  #
   traefik:
     image: traefik:2.10
     ports:
       - 8000:80
       - 8001:8080
-    depends_on:
-      - backend
     volumes:
       - $PWD/traefik/traefik.dev.yml:/etc/traefik/traefik.yml
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
-volumes:
-  postgres_data:
+#
+# ------------------------------------------------------------------
+#
