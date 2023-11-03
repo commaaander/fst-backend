@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 class DietTypeMixin(models.Model):
     DIET_TYPE__CHOICES = (
-        ("not_specified", _("None")),
+        ("not_specified", _("----")),
         ("vegetarian", _("Vegetarian")),
         ("vegan", _("Vegan")),
         ("others", _("Other")),
