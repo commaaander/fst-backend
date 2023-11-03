@@ -1,21 +1,20 @@
 from django.db import models
-import uuid
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
 
+from .base import BaseModel
 from .gendermixin import GenderMixin
 from .generationmixin import GenerationMixin
 from .member import Member
-from django.utils.translation import gettext_lazy as _
 
 
-class SiblingRelationship(models.Model):
+class SiblingRelationship(BaseModel):
     RELATIONSHIP_TYPES = (
         ("blood", _("blood")),
         ("half", _("half")),
         ("step", _("step")),
     )
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     from_node = models.ForeignKey("Node", on_delete=models.CASCADE, related_name="from_sibling_node_set")
     to_node = models.ForeignKey("Node", on_delete=models.CASCADE, related_name="to_sibling_node_set")
     relationship_type = models.CharField(max_length=10, choices=RELATIONSHIP_TYPES)
@@ -24,12 +23,11 @@ class SiblingRelationship(models.Model):
         unique_together = [("from_node", "to_node")]
 
 
-class SpouseRelationship(models.Model):
+class SpouseRelationship(BaseModel):
     RELATIONSHIP_TYPES = (
         ("partnership", _("partnership")),
         ("married", _("married")),
     )
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     from_node = models.ForeignKey("Node", on_delete=models.CASCADE, related_name="from_spouse_node_set")
     to_node = models.ForeignKey("Node", on_delete=models.CASCADE, related_name="to_spouse_node_set")
     relationship_type = models.CharField(max_length=16, choices=RELATIONSHIP_TYPES)
@@ -38,7 +36,7 @@ class SpouseRelationship(models.Model):
         unique_together = [("from_node", "to_node")]
 
 
-class ParentChildRelationship(models.Model):
+class ParentChildRelationship(BaseModel):
     RELATIONSHIP_TYPES = (
         ("blood", _("blood")),
         ("adopted", _("adopted")),

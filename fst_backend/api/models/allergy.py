@@ -1,10 +1,10 @@
 from django.db import models
-import uuid
-
 from django.utils.translation import gettext_lazy as _
 
+from .base import BaseModel
 
-class Allergy(models.Model):
+
+class Allergy(BaseModel):
     class AllergyType(models.TextChoices):
         nuts = "nuts", _("Nüsse")
         lactose = "lactose", _("Laktose")
@@ -17,7 +17,6 @@ class Allergy(models.Model):
         soy = "soy", _("Soja")
         custom = "custom", _("Sonstige")
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     type = models.CharField(choices=AllergyType.choices, default=AllergyType.custom, max_length=100)
 
     def __str__(self) -> str:

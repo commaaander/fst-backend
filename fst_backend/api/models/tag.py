@@ -1,9 +1,9 @@
 from django.db import models
-import uuid
+
+from .base import BaseModel
 
 
-class Tag(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class Tag(BaseModel):
     label = models.CharField(max_length=64)
 
     def __str__(self) -> str:

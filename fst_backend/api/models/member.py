@@ -1,16 +1,14 @@
 from django.db import models
-import uuid
-
 
 from .allergy import Allergy
+from .base import BaseModel
 from .customdate import CustomDate
-from .titlemixin import TitleMixin
-from .gendermixin import GenderMixin
 from .diettypemixin import DietTypeMixin
+from .gendermixin import GenderMixin
+from .titlemixin import TitleMixin
 
 
-class Member(TitleMixin, GenderMixin, DietTypeMixin):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class Member(BaseModel, TitleMixin, GenderMixin, DietTypeMixin):
     firstname = models.CharField(blank=True, null=True, max_length=100)
     lastname = models.CharField(max_length=100)
     middlenames = models.CharField(blank=True, null=True, max_length=100)

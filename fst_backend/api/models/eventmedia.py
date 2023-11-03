@@ -1,18 +1,17 @@
 from django.db import models
-import uuid
-
-from .tag import Tag
-from .event import Event
-from .customdate import CustomDate
 from PIL import Image
+
+from .base import BaseModel
+from .customdate import CustomDate
+from .event import Event
+from .tag import Tag
 
 
 def upload_to(instance, filename):
     return "images/{filename}".format(filename=filename)
 
 
-class EventMedia(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class EventMedia(BaseModel):
     mediaUrl = models.ImageField(upload_to=upload_to, blank=True, null=True)
     mimeType = models.CharField(max_length=64)
     event = models.ForeignKey(blank=True, null=True, to=Event, on_delete=models.CASCADE)
