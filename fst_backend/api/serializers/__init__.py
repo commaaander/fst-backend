@@ -1,4 +1,4 @@
-# flake8: noqa: F401
+# flake8: noqa: F401, F403
 from .allergy import AllergySerializer
 from .customdate import CustomDateSerializer
 from .event import EventSerializer
