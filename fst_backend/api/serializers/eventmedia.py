@@ -5,12 +5,4 @@ from fst_backend.api.models import EventMedia
 class EventMediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventMedia
-        fields = [
-            "mediaUrl",
-            "mimeType",
-            "event",
-            "from_day",
-            "from_month",
-            "from_year",
-            "tags",
-        ]
+        fields = ["id", "url", "mediaUrl", "thumbnailUrl", "mimeType", "event", "from_date", "tags"]
