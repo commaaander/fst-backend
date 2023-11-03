@@ -62,6 +62,7 @@ services:
       - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
       - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
       - DJANGO_WORKDIR=${DJANGO_WORKDIR}
+      - DJANGO_SETTINGS_MODULE=fst_backend.settings.dev
     depends_on:
       - db
     labels:

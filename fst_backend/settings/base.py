@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "drf_spectacular",
+    "django_extensions",
     # local
     "fst_backend.core.apps.CoreConfig",
     "fst_backend.accounts.apps.AccountsConfig",
@@ -167,3 +168,6 @@ MEDIA_ROOT = os.path.join(os.path.dirname(os.environ.get("DJANGO_WORKDIR", BASE_
 
 # URL used to access the media
 MEDIA_URL = "/media/"
+
+# Always use IPython for shell_plus
+SHELL_PLUS = "ipython"
