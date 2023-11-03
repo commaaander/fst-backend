@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from fst_backend.api.models import CustomDate, Member, Node
+from .allergy import AllergySerializer
 
 
 class MemberSerializer(serializers.ModelSerializer):
@@ -20,6 +21,7 @@ class MemberSerializer(serializers.ModelSerializer):
         default="",
         help_text=_("Format: YYYY-MM-DD"),
     )
+    allergies = AllergySerializer(read_only=False, many=True)
 
     class Meta:
         model = Member
@@ -47,7 +49,6 @@ class MemberSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        allergies_data = validated_data.pop("allergies", [])
         validated_data["birthday"] = self.convert_str_to_custom_date(validated_data.get("birthday"))
         validated_data["deathday"] = self.convert_str_to_custom_date(validated_data.get("deathday"))
 
@@ -55,13 +56,9 @@ class MemberSerializer(serializers.ModelSerializer):
         node = Node(member_ptr=member)
         node.save_base(raw=True)
 
-        member.allergies.set(allergies_data)
-
         return member
 
     def update(self, instance, validated_data):
-        instance.allergies.set(validated_data.pop("allergies", []))
-
         for attribute in ["birthday", "deathday"]:
             date_str = validated_data.pop(attribute)
             if date_str:
