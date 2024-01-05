@@ -130,6 +130,19 @@ asgiref = ">=3.6"
 Django = ">=3.2"
 
 [[package]]
+name = "django-environ"
+version = "0.11.2"
+description = "A package that allows you to utilize 12factor inspired environment variables to configure your Django application."
+category = "main"
+optional = false
+python-versions = ">=3.6,<4"
+
+[package.extras]
+develop = ["coverage[toml] (>=5.0a4)", "pytest (>=4.6.11)", "furo (>=2021.8.17b43,<2021.9.0)", "sphinx (>=3.5.0)", "sphinx-notfound-page"]
+docs = ["furo (>=2021.8.17b43,<2021.9.0)", "sphinx (>=3.5.0)", "sphinx-notfound-page"]
+testing = ["coverage[toml] (>=5.0a4)", "pytest (>=4.6.11)"]
+
+[[package]]
 name = "django-extensions"
 version = "3.2.3"
 description = "Extensions for Django"
@@ -760,7 +773,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-ena
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "49819d62e4ecab5331982056f3e002b5479232827f9193b558c344fc9ee5a23b"
+content-hash = "6b38dae8de5ae099a8ab158e58448825bc09a13c1404217934df708cc99fd88c"
 
 [metadata.files]
 appnope = []
@@ -774,6 +787,7 @@ debugpy = []
 decorator = []
 django = []
 django-cors-headers = []
+django-environ = []
 django-extensions = []
 djangorestframework = []
 drf-spectacular = []
