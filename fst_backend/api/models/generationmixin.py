@@ -13,7 +13,7 @@ class GenerationMixin(models.Model):
         ("violet", _("Diverse")),
     )
 
-    generation = models.CharField(max_length=15, choices=GENERATION_CHOICES)
+    generation = models.CharField(max_length=15, choices=GENERATION_CHOICES, default="not_specified")
 
     class Meta:
         abstract = True

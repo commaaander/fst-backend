@@ -1,56 +1,46 @@
 from django.db import models
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
-from django.utils.translation import gettext_lazy as _
 
+from fst_backend.api.fields import PartialDateField
+
+from .allergy import Allergy
 from .base import BaseModel
+from .diettypemixin import DietTypeMixin
 from .gendermixin import GenderMixin
-from .generationmixin import GenerationMixin
-from .member import Member
+from .relationships import SiblingRelationship, SpouseRelationship
+from .titlemixin import TitleMixin
 
 
-class SiblingRelationship(BaseModel):
-    RELATIONSHIP_TYPES = (
-        ("blood", _("blood")),
-        ("half", _("half")),
-        ("step", _("step")),
-    )
-    from_node = models.ForeignKey("Node", on_delete=models.CASCADE, related_name="from_sibling_node_set")
-    to_node = models.ForeignKey("Node", on_delete=models.CASCADE, related_name="to_sibling_node_set")
-    relationship_type = models.CharField(max_length=10, choices=RELATIONSHIP_TYPES)
+class Person(BaseModel, TitleMixin, GenderMixin, DietTypeMixin):
+    # name data
+    lastname = models.CharField(max_length=100)
+    middlenames = models.CharField(blank=True, null=True, max_length=100)
+    firstname = models.CharField(blank=True, null=True, max_length=100)
 
-    class Meta:
-        unique_together = [("from_node", "to_node")]
+    # birthday data
+    birthday = PartialDateField(blank=True, null=True)
+    birthname = models.CharField(blank=True, null=True, max_length=100)
+    placeOfBirth = models.CharField(blank=True, null=True, max_length=100)
 
+    # deathday data
+    deathday = PartialDateField(blank=True, null=True)
+    placeOfDeath = models.CharField(blank=True, null=True, max_length=100)
 
-class SpouseRelationship(BaseModel):
-    RELATIONSHIP_TYPES = (
-        ("partnership", _("partnership")),
-        ("married", _("married")),
-    )
-    from_node = models.ForeignKey("Node", on_delete=models.CASCADE, related_name="from_spouse_node_set")
-    to_node = models.ForeignKey("Node", on_delete=models.CASCADE, related_name="to_spouse_node_set")
-    relationship_type = models.CharField(max_length=16, choices=RELATIONSHIP_TYPES)
+    # adress
+    address = models.CharField(blank=True, null=True, max_length=100)
+    zip = models.CharField(blank=True, null=True, max_length=10)
+    city = models.CharField(blank=True, null=True, max_length=100)
+    country = models.CharField(blank=True, null=True, max_length=100)
 
-    class Meta:
-        unique_together = [("from_node", "to_node")]
+    # contact
+    email = models.EmailField(blank=True, null=True, max_length=100)
+    phone = models.CharField(blank=True, null=True, max_length=100)
 
+    # health data
+    allergies = models.ManyToManyField(to=Allergy, blank=True)
 
-class ParentChildRelationship(BaseModel):
-    RELATIONSHIP_TYPES = (
-        ("blood", _("blood")),
-        ("adopted", _("adopted")),
-        ("step", _("step")),
-    )
-    parent = models.ForeignKey("Node", related_name="child_relations", on_delete=models.CASCADE)
-    child = models.ForeignKey("Node", related_name="parent_relations", on_delete=models.CASCADE)
-    relationship_type = models.CharField(max_length=50, choices=RELATIONSHIP_TYPES)
-
-    class Meta:
-        constraints = [models.UniqueConstraint(fields=["parent", "child"], name="unique_parent_child_relation")]
-
-
-class Node(Member, GenderMixin, GenerationMixin):
+    # relationship data
     parents = models.ManyToManyField(
         "self", through="ParentChildRelationship", symmetrical=False, related_name="children", blank=True
     )
@@ -62,14 +52,14 @@ class Node(Member, GenderMixin, GenerationMixin):
     )
 
     def __str__(self) -> str:
-        return f"{self.firstname} {self.lastname}".strip()
+        return f"{self.lastname}, {self.firstname}"
 
 
 @receiver(post_save, sender=SiblingRelationship)
 def create_symmetrical_sibling(sender, instance, **kwargs):
     reverse_sibling, created = SiblingRelationship.objects.get_or_create(
-        from_node=instance.to_node,
-        to_node=instance.from_node,
+        from_person=instance.to_person,
+        to_person=instance.from_person,
         defaults={"relationship_type": instance.relationship_type},
     )
     # If the reverse relationship exists but has a different relationship_type, update it
@@ -82,7 +72,9 @@ def create_symmetrical_sibling(sender, instance, **kwargs):
 def delete_reverse_sibling_relationship(sender, instance, **kwargs):
     try:
         reverse_relationship = SiblingRelationship.objects.get(
-            from_node=instance.to_node, to_node=instance.from_node, relationship_type=instance.relationship_type
+            from_person=instance.to_person,
+            to_person=instance.from_person,
+            relationship_type=instance.relationship_type,
         )
         reverse_relationship.delete()
     except SiblingRelationship.DoesNotExist:
@@ -92,8 +84,8 @@ def delete_reverse_sibling_relationship(sender, instance, **kwargs):
 @receiver(post_save, sender=SpouseRelationship)
 def create_symmetrical_pouse(sender, instance, **kwargs):
     reverse_sibling, created = SpouseRelationship.objects.get_or_create(
-        from_node=instance.to_node,
-        to_node=instance.from_node,
+        from_person=instance.to_person,
+        to_person=instance.from_person,
         defaults={"relationship_type": instance.relationship_type},
     )
     # If the reverse relationship exists but has a different relationship_type, update it
@@ -106,7 +98,9 @@ def create_symmetrical_pouse(sender, instance, **kwargs):
 def delete_reverse_spouse_relationship(sender, instance, **kwargs):
     try:
         reverse_relationship = SpouseRelationship.objects.get(
-            from_node=instance.to_node, to_node=instance.from_node, relationship_type=instance.relationship_type
+            from_person=instance.to_person,
+            to_person=instance.from_person,
+            relationship_type=instance.relationship_type,
         )
         reverse_relationship.delete()
     except SpouseRelationship.DoesNotExist:

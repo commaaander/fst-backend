@@ -10,7 +10,7 @@ class DietTypeMixin(models.Model):
         ("others", _("Other")),
     )
 
-    dietType = models.CharField(max_length=15, choices=DIET_TYPE__CHOICES)
+    dietType = models.CharField(max_length=15, choices=DIET_TYPE__CHOICES, default="not_specified")
 
     class Meta:
         abstract = True

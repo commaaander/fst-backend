@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from fst_backend.api.models import (
-    Node,
+    Person,
     ParentChildRelationship,
     SiblingRelationship,
     SpouseRelationship,
@@ -9,16 +9,16 @@ from fst_backend.api.models import (
 
 
 class SiblingRelationshipSerializer(serializers.ModelSerializer):
-    to_node = serializers.PrimaryKeyRelatedField(queryset=Node.objects.all())
-    from_node = serializers.PrimaryKeyRelatedField(queryset=Node.objects.all())
+    to_node = serializers.PrimaryKeyRelatedField(source="to_person", queryset=Person.objects.all())
+    from_node = serializers.PrimaryKeyRelatedField(source="from_person", queryset=Person.objects.all())
 
     class Meta:
         model = SiblingRelationship
-        fields = "__all__"
+        fields = ["id", "url", "to_node", "from_node", "relationship_type"]
 
 
 class SiblingSerializer(serializers.ModelSerializer):
-    member_id = serializers.PrimaryKeyRelatedField(source="to_node", read_only=True)
+    member_id = serializers.PrimaryKeyRelatedField(source="to_person", read_only=True)
 
     class Meta:
         model = SiblingRelationship
@@ -26,16 +26,16 @@ class SiblingSerializer(serializers.ModelSerializer):
 
 
 class SpouseRelationshipSerializer(serializers.ModelSerializer):
-    to_node = serializers.PrimaryKeyRelatedField(queryset=Node.objects.all())
-    from_node = serializers.PrimaryKeyRelatedField(queryset=Node.objects.all())
+    to_node = serializers.PrimaryKeyRelatedField(source="to_person", queryset=Person.objects.all())
+    from_node = serializers.PrimaryKeyRelatedField(source="from_person", queryset=Person.objects.all())
 
     class Meta:
         model = SpouseRelationship
-        fields = "__all__"
+        fields = ["id", "url", "to_node", "from_node", "begin_date", "end_date"]
 
 
 class SpouseSerializer(serializers.ModelSerializer):
-    member_id = serializers.PrimaryKeyRelatedField(source="to_node", read_only=True)
+    member_id = serializers.PrimaryKeyRelatedField(source="to_person", read_only=True)
 
     class Meta:
         model = SpouseRelationship
@@ -43,8 +43,8 @@ class SpouseSerializer(serializers.ModelSerializer):
 
 
 class ParentChildRelationshipSerializer(serializers.ModelSerializer):
-    parent_id = serializers.PrimaryKeyRelatedField(source="parent", queryset=Node.objects.all())
-    child_id = serializers.PrimaryKeyRelatedField(source="child", queryset=Node.objects.all())
+    parent_id = serializers.PrimaryKeyRelatedField(source="parent", queryset=Person.objects.all())
+    child_id = serializers.PrimaryKeyRelatedField(source="child", queryset=Person.objects.all())
 
     class Meta:
         model = ParentChildRelationship
@@ -52,7 +52,7 @@ class ParentChildRelationshipSerializer(serializers.ModelSerializer):
 
 
 class ParentRelationshipSerializer(serializers.ModelSerializer):
-    member_id = serializers.PrimaryKeyRelatedField(source="parent", queryset=Node.objects.all())
+    member_id = serializers.PrimaryKeyRelatedField(source="parent", queryset=Person.objects.all())
 
     class Meta:
         model = ParentChildRelationship
@@ -60,7 +60,7 @@ class ParentRelationshipSerializer(serializers.ModelSerializer):
 
 
 class ChildRelationshipSerializer(serializers.ModelSerializer):
-    member_id = serializers.PrimaryKeyRelatedField(source="child", queryset=Node.objects.all())
+    member_id = serializers.PrimaryKeyRelatedField(source="child", queryset=Person.objects.all())
 
     class Meta:
         model = ParentChildRelationship
@@ -70,9 +70,9 @@ class ChildRelationshipSerializer(serializers.ModelSerializer):
 class NodeSerializer(serializers.ModelSerializer):
     parents = ParentRelationshipSerializer(source="parent_relations", many=True, read_only=True)
     children = ChildRelationshipSerializer(source="child_relations", many=True, read_only=True)
-    siblings = SiblingSerializer(source="from_sibling_node_set", many=True, read_only=True)
-    spouses = SpouseSerializer(source="from_spouse_node_set", many=True, read_only=True)
+    siblings = SiblingSerializer(source="from_sibling_person_set", many=True, read_only=True)
+    spouses = SpouseSerializer(source="from_spouse_person_set", many=True, read_only=True)
 
     class Meta:
-        model = Node
-        fields = "__all__"
+        model = Person
+        fields = ["lastname", "firstname", "parents", "children", "siblings", "spouses"]

@@ -2,9 +2,9 @@ from django.db import models
 from PIL import Image
 
 from .base import BaseModel
-from .customdate import CustomDate
 from .event import Event
 from .tag import Tag
+from fst_backend.api.fields import PartialDateField
 
 
 def upload_to(instance, filename):
@@ -15,9 +15,7 @@ class EventMedia(BaseModel):
     mediaUrl = models.ImageField(upload_to=upload_to, blank=True, null=True)
     mimeType = models.CharField(max_length=64)
     event = models.ForeignKey(blank=True, null=True, to=Event, on_delete=models.CASCADE)
-    from_date = models.ForeignKey(
-        CustomDate, blank=True, null=True, on_delete=models.SET_NULL, related_name="eventmedia_froms"
-    )
+    from_date = PartialDateField
     tags = models.ManyToManyField(to=Tag, blank=True)
     thumbnailUrl = models.ImageField(upload_to="thumbnails/", blank=True, null=True, editable=False)
 

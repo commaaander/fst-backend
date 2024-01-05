@@ -10,7 +10,7 @@ class GenderMixin(models.Model):
         ("diverse", _("Diverse")),
     )
 
-    gender = models.CharField(max_length=15, choices=GENDER_CHOICES)
+    gender = models.CharField(max_length=15, choices=GENDER_CHOICES, default="not_specified")
 
     class Meta:
         abstract = True

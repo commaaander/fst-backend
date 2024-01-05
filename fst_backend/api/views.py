@@ -7,11 +7,9 @@ from fst_backend.accounts.serializers import CustomUserSerializer, GroupSerializ
 
 from .models import (
     Allergy,
-    CustomDate,
     Event,
     EventMedia,
-    Member,
-    Node,
+    Person,
     ParentChildRelationship,
     SiblingRelationship,
     SpouseRelationship,
@@ -19,7 +17,6 @@ from .models import (
 )
 from .serializers import (
     AllergySerializer,
-    CustomDateSerializer,
     EventMediaSerializer,
     EventSerializer,
     MemberSerializer,
@@ -28,6 +25,7 @@ from .serializers import (
     SiblingRelationshipSerializer,
     SpouseRelationshipSerializer,
     TagSerializer,
+    PersonsSerializer,
 )
 
 
@@ -49,12 +47,6 @@ class EventViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class CustomDateViewSet(viewsets.ModelViewSet):
-    queryset = CustomDate.objects.all()
-    serializer_class = CustomDateSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
 class EventMediaViewSet(viewsets.ModelViewSet):
     queryset = EventMedia.objects.all().order_by("id")
     serializer_class = EventMediaSerializer
@@ -69,7 +61,7 @@ class TagViewSet(viewsets.ModelViewSet):
 
 
 class MemberViewSet(viewsets.ModelViewSet):
-    queryset = Member.objects.all().order_by("lastname", "firstname")
+    queryset = Person.objects.all().order_by("lastname", "firstname")
     serializer_class = MemberSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -99,6 +91,12 @@ class ParentChildRelationshipSerializerViewSet(viewsets.ModelViewSet):
 
 
 class NodeViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Node.objects.all()
+    queryset = Person.objects.all().order_by("lastname", "firstname")
     serializer_class = NodeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class PersonViewSet(viewsets.ModelViewSet):
+    queryset = Person.objects.all().order_by("lastname", "firstname")
+    serializer_class = PersonsSerializer
     permission_classes = [permissions.IsAuthenticated]

@@ -10,7 +10,7 @@ class TitleMixin(models.Model):
         ("profDr", _("Prof. Dr.")),
     )
 
-    title = models.CharField(max_length=15, choices=TITLE__CHOICES)
+    title = models.CharField(max_length=15, choices=TITLE__CHOICES, default="not_specified")
 
     class Meta:
         abstract = True
