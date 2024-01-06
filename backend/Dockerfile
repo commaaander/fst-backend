@@ -10,16 +10,13 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # install dependencies
-RUN pip install --upgrade pip
 COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # copy project
-COPY ./LICENSE .
-COPY ./fst_backend ./fst_backend
-COPY ./manage.py .
-COPY ./run.sh /usr/local/bin
-RUN  chmod u+x /usr/local/bin/run.sh
+COPY ./run*.sh /usr/local/bin/
+RUN  chmod +x /usr/local/bin/run.sh
+COPY ./LICENSE ./manage.py ./fst_backend ./
 
 EXPOSE 8000
 

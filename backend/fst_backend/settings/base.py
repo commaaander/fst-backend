@@ -10,8 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
+
+import environ
+
+env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,11 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "changeme")
+SECRET_KEY = env("DJANGO_SECRET_KEY", default="changeme")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get("DJANGO_DEBUG", 1))
+DEBUG = bool(env("DJANGO_DEBUG", default=1))
 
 ALLOWED_HOSTS = []
 
@@ -85,15 +89,7 @@ WSGI_APPLICATION = "fst_backend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": os.environ.get("DB_HOST"),
-        "NAME": os.environ.get("DB_NAME"),
-        "USER": os.environ.get("DB_USER"),
-        "PASSWORD": os.environ.get("DB_PASSWORD"),
-    }
-}
+DATABASES = {"default": env.db_url()}
 
 
 # Password validation
@@ -164,7 +160,7 @@ SPECTACULAR_SETTINGS = {
 }
 
 # Media
-MEDIA_ROOT = os.path.join(os.path.dirname(os.environ.get("DJANGO_WORKDIR", BASE_DIR)), "media")
+MEDIA_ROOT = os.path.join(os.path.dirname(env("DJANGO_WORKDIR", default=BASE_DIR)), "media")
 
 # URL used to access the media
 MEDIA_URL = "/media/"

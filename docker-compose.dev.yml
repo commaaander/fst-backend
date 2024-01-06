@@ -22,7 +22,13 @@ services:
   # ------------------------------------------------------------------
   #
   pgadmin:
-    image: dpage/pgadmin4
+    build:
+      dockerfile: Dockerfile
+      context: ./pgadmin
+      args:
+        - POSTGRES_DB=${DB_NAME}
+        - POSTGRES_USER=${DB_USER}
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
     expose:
       - 80
     depends_on:
@@ -30,9 +36,6 @@ services:
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
-    volumes:
-      - "$PWD/db/servers.json:/pgadmin4/servers.json"
-      - "$PWD/db/pgpass:/pgpass"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.fst-pgadmin.rule=Host(`fst-pgadmin.localhost`)"
@@ -43,20 +46,16 @@ services:
     hostname: django
     build:
       dockerfile: Dockerfile
-      context: .
+      context: ./backend
       args:
         - DJANGO_WORKDIR=${DJANGO_WORKDIR}
-        - DEBUG=${DJANGO_DEBUG}
     volumes:
-      - $PWD/fst_backend:${DJANGO_WORKDIR}/fst_backend
+      - $PWD/backend/fst_backend:${DJANGO_WORKDIR}/fst_backend
     expose:
       - 8000
     environment:
       - DEBUG=${DJANGO_DEBUG}
-      - DB_HOST=db
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
       - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
       - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
