@@ -2,17 +2,9 @@
     "workbench.colorCustomizations": {
         "editorRuler.foreground": "#004444"
     },
-    "[python]": {
-        "editor.rulers": [
-            119
-        ],
-    },
     "black-formatter.args": [
         "--line-length",
         "119"
-    ],
-    "flake8.args": [
-        "--max-line-length=119",
     ],
     "editor.formatOnSave": true,
     "ruff.lint.args": [
@@ -30,4 +22,14 @@
     "python.testing.unittestEnabled": false,
     "python.terminal.activateEnvInCurrentTerminal": true,
     "python.terminal.activateEnvironment": true,
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.fixAll": true,
+            "source.organizeImports": true
+        },
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.rulers": [
+            119
+        ],
+    },
 }
