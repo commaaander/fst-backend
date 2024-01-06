@@ -54,7 +54,7 @@ services:
     expose:
       - 8000
     environment:
-      - DEBUG=${DJANGO_DEBUG}
+      - DJANGO_DEBUG=${DJANGO_DEBUG}
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
       - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
@@ -73,8 +73,8 @@ services:
   traefik:
     image: traefik:2.10
     ports:
-      - 8000:80
-      - 8001:8080
+      - ${TRAEFIK_PORT}:80
+      - ${TRAEFIK_DASHBOARD_PORT}:8080
     volumes:
       - $PWD/traefik/traefik.dev.yml:/etc/traefik/traefik.yml
       - /var/run/docker.sock:/var/run/docker.sock:ro
