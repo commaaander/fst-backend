@@ -16,7 +16,9 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # copy project
 COPY ./run*.sh /usr/local/bin/
 RUN  chmod +x /usr/local/bin/run.sh
-COPY ./LICENSE ./manage.py ./fst_backend ./
+COPY ./LICENSE ./manage.py ./
+COPY ./fst_backend/ ./fst_backend/
+
 
 EXPOSE 8000
 
