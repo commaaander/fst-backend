@@ -23,7 +23,7 @@ class PartialDate:
             return
 
         try:
-            match = pattern.match(self.date_str or "")
+            match = pattern.fullmatch(self.date_str or "")
             if match.groupdict()["year"] is not None:
                 self.year = int(match.groupdict()["year"] or 0)
                 self.month = int(match.groupdict()["month"] or 0)
@@ -46,7 +46,7 @@ class PartialDate:
                 raise ValueError(f"{ve}" + f", year={self.year} month={self.month} day={self.day}")
 
     def __str__(self):
-        return "{:04d}-{:02d}-{:02d}".format(self.year, self.month, self.day)
+        return f"{self.year:04d}-{self.month:02d}-{self.day:02d}"
 
     def __len__(self):
         return len(self.__str__())

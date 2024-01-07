@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
+from rest_framework import serializers
 
 from .utils import PartialDate
 
@@ -34,3 +35,31 @@ class PartialDateModelField(models.CharField):
             return PartialDate(value)
         except ValueError as ve:
             raise ValidationError(ve)
+
+
+class PartialDateSerializerField(serializers.CharField):
+    @staticmethod
+    def _validate_partialdate(value):
+        # print(f"_validate_partialdate:: trying to validate {value}")
+        try:
+            return str(PartialDate(value))
+        except ValueError as ve:
+            raise serializers.ValidationError(ve)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.validators.append(PartialDateSerializerField._validate_partialdate)
+
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+        try:
+            return str(PartialDate(data))
+        except ValueError as ve:
+            raise serializers.ValidationError(ve)
+
+    def to_representation(self, value):
+        value = super().to_representation(value)
+        try:
+            return str(PartialDate(value))
+        except ValueError as ve:
+            raise serializers.ValidationError(ve)

@@ -9,9 +9,11 @@ from .tag import Tag
 
 class Event(BaseModel):
     title = models.CharField(max_length=64)
-    description = models.TextField(blank=True, null=True, max_length=64)
+    description = models.TextField(blank=True, null=True)
+    signature = models.TextField(blank=True, null=True)
     from_date = PartialDateModelField()
     to_date = PartialDateModelField()
+    registration_until = models.DateTimeField(blank=True, null=True)
     organizer = models.ForeignKey(blank=True, null=True, to=Person, on_delete=models.PROTECT, related_name="events")
     tags = models.ManyToManyField(Tag)
 
