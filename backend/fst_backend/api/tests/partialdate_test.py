@@ -1,9 +1,11 @@
-from django.core.exceptions import ValidationError
-from django.test import TestCase
 import logging
 
-from fst_backend.api.fields import PartialDate, PartialDateField
+from django.core.exceptions import ValidationError
+from django.test import TestCase
+
+from fst_backend.api.fields import PartialDateField
 from fst_backend.api.models import Person
+from fst_backend.api.utils import PartialDate
 
 logger = logging.getLogger(__name__)
 

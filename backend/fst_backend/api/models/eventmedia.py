@@ -1,10 +1,11 @@
 from django.db import models
 from PIL import Image
 
+from fst_backend.api.fields import PartialDateField
+
 from .base import BaseModel
 from .event import Event
 from .tag import Tag
-from fst_backend.api.fields import PartialDateField
 
 
 def upload_to(instance, filename):
