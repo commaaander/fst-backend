@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
-from fst_backend.api.fields import PartialDateField
+from fst_backend.api.fields import PartialDateModelField
 
 from .allergy import Allergy
 from .base import BaseModel
@@ -19,12 +19,12 @@ class Person(BaseModel, TitleMixin, GenderMixin, DietTypeMixin):
     firstname = models.CharField(blank=True, null=True, max_length=100)
 
     # birthday data
-    birthday = PartialDateField(blank=True, null=True)
+    birthday = PartialDateModelField(blank=True, null=True)
     birthname = models.CharField(blank=True, null=True, max_length=100)
     placeOfBirth = models.CharField(blank=True, null=True, max_length=100)
 
     # deathday data
-    deathday = PartialDateField(blank=True, null=True)
+    deathday = PartialDateModelField(blank=True, null=True)
     placeOfDeath = models.CharField(blank=True, null=True, max_length=100)
 
     # adress

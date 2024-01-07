@@ -4,7 +4,7 @@ from django.db import models
 from .utils import PartialDate
 
 
-class PartialDateField(models.CharField):
+class PartialDateModelField(models.CharField):
     description = "A field for storing partial dates (e.g if just day and month are known)."
 
     def __init__(self, *args, **kwargs):

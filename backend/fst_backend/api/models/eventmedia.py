@@ -1,7 +1,7 @@
 from django.db import models
 from PIL import Image
 
-from fst_backend.api.fields import PartialDateField
+from fst_backend.api.fields import PartialDateModelField
 
 from .base import BaseModel
 from .event import Event
@@ -16,7 +16,7 @@ class EventMedia(BaseModel):
     mediaUrl = models.ImageField(upload_to=upload_to, blank=True, null=True)
     mimeType = models.CharField(max_length=64)
     event = models.ForeignKey(blank=True, null=True, to=Event, on_delete=models.CASCADE)
-    from_date = PartialDateField
+    from_date = PartialDateModelField
     tags = models.ManyToManyField(to=Tag, blank=True)
     thumbnailUrl = models.ImageField(upload_to="thumbnails/", blank=True, null=True, editable=False)
 

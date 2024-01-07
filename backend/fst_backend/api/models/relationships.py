@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from fst_backend.api.fields import PartialDateField
+from fst_backend.api.fields import PartialDateModelField
 
 from .base import BaseModel
 
@@ -31,8 +31,8 @@ class SpouseRelationship(BaseModel):
     from_person = models.ForeignKey("Person", on_delete=models.CASCADE, related_name="from_spouse_person_set")
     to_person = models.ForeignKey("Person", on_delete=models.CASCADE, related_name="to_spouse_person_set")
     relationship_type = models.CharField(max_length=16, choices=RELATIONSHIP_TYPES)
-    begin_date = PartialDateField()
-    end_date = PartialDateField()
+    begin_date = PartialDateModelField()
+    end_date = PartialDateModelField()
 
     class Meta:
         unique_together = [("from_person", "to_person")]

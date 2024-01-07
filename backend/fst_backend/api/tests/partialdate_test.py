@@ -3,7 +3,7 @@ import logging
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from fst_backend.api.fields import PartialDateField
+from fst_backend.api.fields import PartialDateModelField
 from fst_backend.api.models import Person
 from fst_backend.api.utils import PartialDate
 
@@ -52,9 +52,9 @@ class PartialDateTestCase(TestCase):
         self.assertEqual(str(date), "2023-11-06")
 
 
-class PartialDateFieldTestCase(TestCase):
+class PartialDateModelFieldTestCase(TestCase):
     def test_partial_date_field_from_db(self):
-        # Assuming you have a model with a PartialDateField called MyModel
+        # Assuming you have a model with a PartialDateModelField called MyModel
         model_instance = Person.objects.create(lastname="Mustermann", birthday="2023-11-06")
         model_instance.refresh_from_db()
 
@@ -65,7 +65,7 @@ class PartialDateFieldTestCase(TestCase):
 
     def test_partial_date_field_to_python(self):
         # Ensure to_python is converting to PartialDate object
-        partial_date_field = PartialDateField()
+        partial_date_field = PartialDateModelField()
         result = partial_date_field.to_python("2023-11-06")
 
         self.assertIsInstance(result, PartialDate)
