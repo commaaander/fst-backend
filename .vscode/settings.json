@@ -24,8 +24,8 @@
     "python.terminal.activateEnvironment": true,
     "[python]": {
         "editor.codeActionsOnSave": {
-            "source.fixAll": true,
-            "source.organizeImports": true
+            // "source.fixAll": "explicit",
+            //     "source.organizeImports": "explicit"
         },
         "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.rulers": [
