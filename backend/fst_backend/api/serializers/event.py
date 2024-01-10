@@ -8,6 +8,7 @@ from fst_backend.api.fields import PartialDateSerializerField
 class EventSerializer(serializers.ModelSerializer):
     to = PartialDateSerializerField(required=False, allow_blank=True, default="", source="to_date")
     vars()["from"] = PartialDateSerializerField(required=False, allow_blank=True, default="", source="from_date")
+    registrationUntil = serializers.DateTimeField(source="registration_until")
 
     class Meta:
         model = Event
@@ -20,5 +21,5 @@ class EventSerializer(serializers.ModelSerializer):
             "organizer",
             "from",
             "to",
-            "registration_until",
+            "registrationUntil",
         ]

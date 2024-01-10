@@ -9,8 +9,8 @@ from .models import (
     Allergy,
     Event,
     EventMedia,
-    Person,
     ParentChildRelationship,
+    Person,
     SiblingRelationship,
     SpouseRelationship,
     Tag,
@@ -22,10 +22,10 @@ from .serializers import (
     MemberSerializer,
     NodeSerializer,
     ParentChildRelationshipSerializer,
+    PersonsSerializer,
     SiblingRelationshipSerializer,
     SpouseRelationshipSerializer,
     TagSerializer,
-    PersonsSerializer,
 )
 
 
@@ -45,6 +45,7 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all().order_by("id")
     serializer_class = EventSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
 
 
 class EventMediaViewSet(viewsets.ModelViewSet):
