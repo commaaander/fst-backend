@@ -14,7 +14,7 @@ class Event(BaseModel):
     from_date = PartialDateModelField()
     to_date = PartialDateModelField()
     registration_until = models.DateTimeField(blank=True, null=True)
-    organizer = models.ForeignKey(blank=True, null=True, to=Person, on_delete=models.PROTECT, related_name="events")
+    organizer = models.ManyToManyField(Person, blank=True, related_name="events")
     tags = models.ManyToManyField(Tag)
 
     def __str__(self) -> str:

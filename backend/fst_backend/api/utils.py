@@ -4,7 +4,7 @@ from datetime import date
 
 class PartialDate:
     def __init__(self, date_str):
-        self.date_str = None if date_str in ["None", ""] else date_str
+        self.date_str = None if date_str in ["None", ""] else str(date_str)
         self.year = 0
         self.month = 0
         self.day = 0
@@ -36,7 +36,7 @@ class PartialDate:
         except:  # noqa: E722
             raise ValueError(
                 "Invalid date format, valid formats are: 'None', YYYY-MM-DD, YYYY, YYYY-MM, MM or MM-DD."
-                + f"date_str={self.date_str}"
+                + f" date_str={self.date_str}, {type(self.date_str)}"
             )
 
         if self.day > 0 and self.month > 0:

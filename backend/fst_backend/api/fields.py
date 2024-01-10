@@ -3,6 +3,7 @@ from django.db import models
 from rest_framework import serializers
 
 from .utils import PartialDate
+import json
 
 
 class PartialDateModelField(models.CharField):
@@ -51,15 +52,16 @@ class PartialDateSerializerField(serializers.CharField):
         self.validators.append(PartialDateSerializerField._validate_partialdate)
 
     def to_internal_value(self, data):
-        data = super().to_internal_value(data)
         try:
-            return str(PartialDate(data))
-        except ValueError as ve:
-            raise serializers.ValidationError(ve)
+            if isinstance(data, str):
+                data = json.loads(data.replace("'", '"'))
+            return str(PartialDate(f"{data['year']:04d}-{data['month']:02d}-{data['day']:02d}"))
+        except ValueError as e:
+            raise serializers.ValidationError(e)
 
     def to_representation(self, value):
-        value = super().to_representation(value)
         try:
-            return str(PartialDate(value))
+            partialdate = PartialDate(value)
+            return {"day": partialdate.day, "month": partialdate.month, "year": partialdate.year}
         except ValueError as ve:
             raise serializers.ValidationError(ve)

@@ -6,7 +6,7 @@ from fst_backend.api.fields import PartialDateSerializerField
 
 
 class EventSerializer(serializers.ModelSerializer):
-    vars()["to"] = PartialDateSerializerField(required=False, allow_blank=True, default="", source="to_date")
+    to = PartialDateSerializerField(required=False, allow_blank=True, default="", source="to_date")
     vars()["from"] = PartialDateSerializerField(required=False, allow_blank=True, default="", source="from_date")
 
     class Meta:
