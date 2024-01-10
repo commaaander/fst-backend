@@ -8,6 +8,7 @@ from fst_backend.accounts.serializers import CustomUserSerializer, GroupSerializ
 from .models import (
     Allergy,
     Event,
+    EventLocation,
     EventMedia,
     ParentChildRelationship,
     Person,
@@ -19,6 +20,7 @@ from .serializers import (
     AllergySerializer,
     EventMediaSerializer,
     EventSerializer,
+    EventLocationSerializer,
     MemberSerializer,
     NodeSerializer,
     ParentChildRelationshipSerializer,
@@ -46,6 +48,12 @@ class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
+
+
+class EventLocationViewSet(viewsets.ModelViewSet):
+    queryset = EventLocation.objects.all().order_by("id")
+    serializer_class = EventLocationSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class EventMediaViewSet(viewsets.ModelViewSet):
