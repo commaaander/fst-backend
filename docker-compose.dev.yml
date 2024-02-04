@@ -53,6 +53,9 @@ services:
       - $PWD/backend/fst_backend:${DJANGO_WORKDIR}/fst_backend
     expose:
       - 8000
+    ports:
+      - 3000:3000
+      - 3001:3001
     environment:
       - DJANGO_DEBUG=${DJANGO_DEBUG}
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
@@ -67,6 +70,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.fst-backend.rule=Host(`fst-backend.localhost`)"
+      - "traefik.http.services.fst-backend.loadbalancer.server.port=8000"
   #
   # ------------------------------------------------------------------
   #

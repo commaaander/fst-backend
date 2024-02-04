@@ -1,0 +1,18 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Print workspaceFolder",
+            "type": "shell",
+            "command": "echo workspaceFolder=${workspaceFolder}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Starte Tests",
+            "type": "shell",
+            "command": "docker compose exec backend sh -c 'python -m debugpy --listen 0.0.0.0:3001 --wait-for-client manage.py test fst_backend.api.tests.tests.EventLocationAPITest'",
+            "problemMatcher": [],
+            "isBackground": true
+        }
+    ]
+}

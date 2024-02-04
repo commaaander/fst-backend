@@ -5,6 +5,33 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Run Django",
+            "type": "python",
+            "request": "attach",
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}/backend/fst_backend",
+                    "remoteRoot": "/var/lib/cia/fst_backend"
+                }
+            ],
+            "port": 3000,
+            "host": "127.0.0.1",
+        },
+        {
+            "name": "Test Django",
+            "type": "python",
+            "request": "attach",
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}/backend/fst_backend",
+                    "remoteRoot": "/var/lib/cia/fst_backend"
+                }
+            ],
+            "port": 3001,
+            "host": "127.0.0.1",
+            "preLaunchTask": "Starte Tests"
+        },
+        {
             "name": "Python: Django",
             "type": "python",
             "request": "launch",
